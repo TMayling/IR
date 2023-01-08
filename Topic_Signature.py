@@ -88,14 +88,15 @@ def n_major_topics(individu,n,topics_words,nb_topics_par_individu):
         pct_recur_topic = nb_recur_topic/nb_topics_detectes*100
         pct_to_print = str(pct_recur_topic)[0:5]
         words_topic = list(topics_words[topics_words["topic"]==lib_topic]['word'])
-        print("Topic "+str(i)+": "+lib_topic+", "+str(nb_recur_topic)[0:1]+" fois reconnu (équivaut à "+str(pct_to_print)+"% des topics détectés). \n Champ lexical: "+str(words_topic)+"\n")
+        print("Topic n°"+str(i)+": "+lib_topic+", "+str(nb_recur_topic)+" fois reconnu (équivaut à "+str(pct_to_print)+"% des topics détectés). \n Champ lexical: "+str(words_topic)+"\n")
+    
         
 def n_major_topics_global(topics_words,nb_topics_global):
     topic_recur = sorted(nb_topics_global, key=nb_topics_global.get) #Classement de récurrence des topics croissant (topics)
     nb_recur = sorted(list(nb_topics_global.values())) #Classement de récurrence des topics croissant (nb_occurences)
     
     nb_topics_detectes = sum(nb_topics_global.values())
-    print(str(nb_topics_detectes)+" topics ont été détectés")
+    print(str(nb_topics_detectes)+" topics ont été détectés\n")
     """
     for i in range(1,n+1):
         lib_topic = topic_recur[-i]
@@ -105,3 +106,22 @@ def n_major_topics_global(topics_words,nb_topics_global):
         words_topic = list(topics_words[topics_words["topic"]==lib_topic]['word'])
         print("Topic "+str(i)+": "+lib_topic+", "+str(nb_recur_topic)[0:1]+" fois reconnu (équivaut à "+str(pct_to_print)+"% des topics détectés). \n Champ lexical: "+str(words_topic)+"\n")
     """
+    
+def compare(individu,n,topics_words,nb_topics_par_individu,nb_topics_global):
+    #Différence entre le pct de réccurence du topic par l'individu et au global
+    pct_indiv_moins_pct_global = nb_topics_global.copy()
+    for topic in nb_topics_global.keys():
+        pct_indiv_moins_pct_global[topic] = (nb_topics_par_individu[individu][topic]/sum(nb_topics_par_individu[individu].values()) - nb_topics_global[topic]/sum(nb_topics_global.values()))*100
+        
+        
+    topic_recur = sorted(pct_indiv_moins_pct_global, key=pct_indiv_moins_pct_global.get) #Classement de récurrence des topics croissant (topics)
+    diff_recur = sorted(list(pct_indiv_moins_pct_global.values())) #Classement de récurrence des topics croissant (nb_occurences)
+    
+    for i in range(1,n+1):
+        lib_topic = topic_recur[-i]
+        diff_topic = diff_recur[-i]
+        diff_to_print = str(diff_topic)[0:5]
+        #pct_to_print = str(pct_recur_topic)[0:5]
+        words_topic = list(topics_words[topics_words["topic"]==lib_topic]['word'])
+        print("Topic privilégié n°"+str(i)+": "+lib_topic+".\n "+individu+" évoque plus ce thème que la moyenne, la différence en points de pourcentage est de "+str(diff_to_print)+ ".\n Champ lexical: "+str(words_topic)+"\n")
+    

@@ -8,6 +8,7 @@ import pandas as pd
 from os import path
 import Topic_Signature as topic
 
+
 def preprocessing(data_init,data_fin):
     if not path.exists(data_fin):
         #Chargement des données
@@ -26,18 +27,25 @@ def load_speechs(data_fin):
     data = pd.read_csv(data_fin, sep=";")
     return data
     
-
-
-#Chargement des données communes
+#Lancement des fonctions de la partie : 1.Topics_Signature
+def signature_topic(individu):
+    topics_words = topic.load_topics('topic_legit.xls')
+    print("-----------Signature de topic \n")
+    nb_topics_par_individu, nb_topics_global = topic.topic_signature(data, topics_words)
+    topic.n_major_topics(individu, 2, topics_words, nb_topics_par_individu)
+    topic.n_major_topics_global(topics_words, nb_topics_global)
+    topic.compare(individu, 2, topics_words, nb_topics_par_individu,nb_topics_global)
+    
+#Chargement des données communes à toutes les analyses
 preprocessing('docs_legit_5k.xls', 'speechs.csv')
 data = load_speechs('speechs.csv')
+individu = 'M. Éric Ciotti' #'M. Éric Ciotti''M. le président'
+
 #1.Topics_Signature
-topics_words = topic.load_topics('topic_legit.xls')
-print("-----------Signature de topic \n")
-nb_topics_par_individu, nb_topics_global = topic.topic_signature(data, topics_words)
-topic.n_major_topics("M. le président", 2, topics_words, nb_topics_par_individu)
-topic.n_major_topics_global(topics_words, nb_topics_global)
+signature_topic(individu)
 #2.
+
+
 
      
 

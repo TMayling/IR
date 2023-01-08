@@ -28,11 +28,14 @@ def load_speechs(data_fin):
     
 
 
-
+#Chargement des données communes
 preprocessing('docs_legit_5k.xls', 'speechs.csv')
 data = load_speechs('speechs.csv')
+#1.Topics_Signature
 topics_words = topic.load_topics('topic_legit.xls')
-topic.topic_signature(data, topics_words)
+print("-----------Signature de topic \n")
+topic.topic_signature(data, topics_words, "M. le président", 5)
+#2.
 
      
 

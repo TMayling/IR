@@ -34,7 +34,9 @@ data = load_speechs('speechs.csv')
 #1.Topics_Signature
 topics_words = topic.load_topics('topic_legit.xls')
 print("-----------Signature de topic \n")
-topic.topic_signature(data, topics_words, "M. le président", 5)
+nb_topics_par_individu, nb_topics_global = topic.topic_signature(data, topics_words)
+topic.n_major_topics("M. le président", 2, topics_words, nb_topics_par_individu)
+topic.n_major_topics_global(topics_words, nb_topics_global)
 #2.
 
      

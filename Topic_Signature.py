@@ -17,8 +17,11 @@ def load_topics(topics_file):
 
 
 
-def topic_signature(data,topics_words, individu, n):
-                   
+def topic_signature(data,topics_words):
+    
+    
+    
+    data = data[data["toptopic"]!="-"] #Suppression des lignes sans toptopic détecté
     dictionnaire={}
     
     #Récupération des toptopics par auteur (1 topic ne peut être compté qu'une fois par prise de parole)
@@ -39,40 +42,66 @@ def topic_signature(data,topics_words, individu, n):
             dictionnaire[auteur].append(top_topic) #Ajout du toptopic dans la liste des topics de l'auteur  
         
     
-    #Création de dictionnaires imbriqués
-    nb_topics = {}
+
+
     distinct_auteurs = data["author"].unique()
     distinct_topics = data["toptopic"].unique()
+    
+    #Initialisation de nb_topics (dictionnaires imbriqués)
+    nb_topics = {}
     for auteur in distinct_auteurs:
         nb_topics[auteur]={}
         for topic in distinct_topics:
             nb_topics[auteur][topic] = 0
             
+    #Initialisation de nb_topics_global
+    nb_topics_global = {}
+    for topic in distinct_topics:
+        nb_topics_global[topic] = 0
+        
             
+    #Remplissage des dictionnaires
     for i in dictionnaire.keys():
-        #Supression des valeurs nulles de la liste
-        while '-' in dictionnaire[i]:
-            dictionnaire[i].remove('-')
         #Alimentation du dictionnaires nb_topics
         while len(dictionnaire[i])>0:
             top_topic = dictionnaire[i][0]
             nb = dictionnaire[i].count(dictionnaire[i][0])
-            nb_topics[i][top_topic] = nb
+            nb_topics[i][top_topic] = nb #remplissage de nb_topics
+            nb_topics_global[top_topic] += nb #remplissage de nb_topics_global
             while top_topic in dictionnaire[i]:
                 dictionnaire[i].remove(top_topic)
-            
     
+            
+    return nb_topics, nb_topics_global
 
     
-    #print(nb_topics[individu]) #Liste des topics de l'individu
-    #Classement des récurrences des topics croissant et nb d'occurences associés
-    topic_recur = sorted(nb_topics[individu], key=nb_topics[individu].get)
-    nb_recur = sorted(list(nb_topics[individu].values()))
     
-    nb_topics_detectes = sum(nb_topics[individu].values())
+def n_major_topics(individu,n,topics_words,nb_topics_par_individu):
+    topic_recur = sorted(nb_topics_par_individu[individu], key=nb_topics_par_individu[individu].get) #Classement de récurrence des topics croissant (topics)
+    nb_recur = sorted(list(nb_topics_par_individu[individu].values())) #Classement de récurrence des topics croissant (nb_occurences)
+    
+    nb_topics_detectes = sum(nb_topics_par_individu[individu].values())
     print(str(nb_topics_detectes)+" topics ont été détectés dans les discours de "+individu+"\n")
     for i in range(1,n+1):
         lib_topic = topic_recur[-i]
         nb_recur_topic = nb_recur[-i]
+        pct_recur_topic = nb_recur_topic/nb_topics_detectes*100
+        pct_to_print = str(pct_recur_topic)[0:5]
         words_topic = list(topics_words[topics_words["topic"]==lib_topic]['word'])
-        print("Topic "+str(i)+": "+lib_topic+", "+str(nb_recur_topic)+" fois reconnu. \n Champx lexical: "+str(words_topic)+"\n")
+        print("Topic "+str(i)+": "+lib_topic+", "+str(nb_recur_topic)[0:1]+" fois reconnu (équivaut à "+str(pct_to_print)+"% des topics détectés). \n Champ lexical: "+str(words_topic)+"\n")
+        
+def n_major_topics_global(topics_words,nb_topics_global):
+    topic_recur = sorted(nb_topics_global, key=nb_topics_global.get) #Classement de récurrence des topics croissant (topics)
+    nb_recur = sorted(list(nb_topics_global.values())) #Classement de récurrence des topics croissant (nb_occurences)
+    
+    nb_topics_detectes = sum(nb_topics_global.values())
+    print(str(nb_topics_detectes)+" topics ont été détectés")
+    """
+    for i in range(1,n+1):
+        lib_topic = topic_recur[-i]
+        nb_recur_topic = nb_recur[-i]
+        pct_recur_topic = nb_recur_topic/nb_topics_detectes*100
+        pct_to_print = str(pct_recur_topic)[0:5]
+        words_topic = list(topics_words[topics_words["topic"]==lib_topic]['word'])
+        print("Topic "+str(i)+": "+lib_topic+", "+str(nb_recur_topic)[0:1]+" fois reconnu (équivaut à "+str(pct_to_print)+"% des topics détectés). \n Champ lexical: "+str(words_topic)+"\n")
+    """

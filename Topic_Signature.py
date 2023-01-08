@@ -96,8 +96,9 @@ def n_major_topics_global(topics_words,nb_topics_global):
     nb_recur = sorted(list(nb_topics_global.values())) #Classement de récurrence des topics croissant (nb_occurences)
     
     nb_topics_detectes = sum(nb_topics_global.values())
-    print(str(nb_topics_detectes)+" topics ont été détectés\n")
     """
+    print(str(nb_topics_detectes)+" topics ont été détectés\n")
+    
     for i in range(1,n+1):
         lib_topic = topic_recur[-i]
         nb_recur_topic = nb_recur[-i]

@@ -7,6 +7,9 @@ Created on Fri Dec 30 11:39:03 2022
 import pandas as pd
 from os import path
 import Topic_Signature as topic
+import Negation_Signature as negation
+
+pd.options.mode.chained_assignment = None  # default='warn' --> Supprime les messages d'avertissements (Negation_Signature)
 
 
 def preprocessing(data_init,data_fin):
@@ -28,13 +31,20 @@ def load_speechs(data_fin):
     return data
     
 #Lancement des fonctions de la partie : 1.Topics_Signature
-def signature_topic(individu):
+def signature_topic():
+    print("---------------------Signature de topic \n")
     topics_words = topic.load_topics('topic_legit.xls')
-    print("-----------Signature de topic \n")
     nb_topics_par_individu, nb_topics_global = topic.topic_signature(data, topics_words)
     topic.n_major_topics(individu, 2, topics_words, nb_topics_par_individu)
     topic.n_major_topics_global(topics_words, nb_topics_global)
     topic.compare(individu, 2, topics_words, nb_topics_par_individu,nb_topics_global)
+    
+#Lancement des fonctions de la partie : 2.Negation_Signature
+def signature_negation():
+    print("---------------------Signature de négation \n")
+    dictionnaire = negation.construc_dict(data)
+    negation.taux_negation_global(dictionnaire)
+    negation.taux_negation(individu, dictionnaire)
     
 #Chargement des données communes à toutes les analyses
 preprocessing('docs_legit_5k.xls', 'speechs.csv')
@@ -42,8 +52,9 @@ data = load_speechs('speechs.csv')
 individu = 'M. Éric Ciotti' #'M. Éric Ciotti''M. le président'
 
 #1.Topics_Signature
-signature_topic(individu)
-#2.
+signature_topic()
+#2.Negation_Signature
+signature_negation()
 
 
 

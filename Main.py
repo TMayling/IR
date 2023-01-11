@@ -8,6 +8,7 @@ import pandas as pd
 from os import path
 import Topic_Signature as topic
 import Negation_Signature as negation
+import Sentiment_Analysis_Signature as sentiment
 
 pd.options.mode.chained_assignment = None  # default='warn' --> Supprime les messages d'avertissements (Negation_Signature)
 
@@ -42,9 +43,17 @@ def signature_topic():
 #Lancement des fonctions de la partie : 2.Negation_Signature
 def signature_negation():
     print("---------------------Signature de négation \n")
-    dictionnaire = negation.construc_dict(data)
-    negation.taux_negation_global(dictionnaire)
-    negation.taux_negation(individu, dictionnaire)
+    dictionnaire_negation = negation.construc_dict(data)
+    negation.taux_negation_global(dictionnaire_negation)
+    negation.taux_negation(individu, dictionnaire_negation)
+    
+#Lancement des fonctions de la partie : 3.Sentiment_Analysis_Signature
+def analyse_sentiment():
+    dictionnaire_sentiment = sentiment.analyse_sentiment(data.iloc[:,:8])
+    sentiments_individu = dictionnaire_sentiment[individu]
+    sentiments_global = dictionnaire_sentiment["global"]
+    
+
     
 #Chargement des données communes à toutes les analyses
 preprocessing('docs_legit_5k.xls', 'speechs.csv')
@@ -55,7 +64,8 @@ individu = 'M. Éric Ciotti' #'M. Éric Ciotti''M. le président'
 signature_topic()
 #2.Negation_Signature
 signature_negation()
-
+#3.Sentiment_Analysis_Signature
+analyse_sentiment()
 
 
      

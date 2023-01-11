@@ -5,6 +5,7 @@ Created on Fri Dec 30 11:39:03 2022
 @author: User
 """
 import pandas as pd
+import plotly.express as px
 from os import path
 import Topic_Signature as topic
 import Negation_Signature as negation
@@ -49,10 +50,17 @@ def signature_negation():
     
 #Lancement des fonctions de la partie : 3.Sentiment_Analysis_Signature
 def analyse_sentiment():
+    print("-------------------- Analyse de sentiments \n")
     dictionnaire_sentiment = sentiment.analyse_sentiment(data.iloc[:,:8])
     sentiments_individu = dictionnaire_sentiment[individu]
-    sentiments_global = dictionnaire_sentiment["global"]
+    sentiments_global = dictionnaire_sentiment["global"]  
+    df = pd.DataFrame({"global":sentiments_global})
+    df_ind = pd.DataFrame({"individu":sentiments_individu})
     
+    fig_individu =  px.pie(df_ind, values='individu', names=["Positif","Neutre","Négatif"], title="Pourcentage de Sentiment des discours de " + individu)  
+    fig_global = px.pie(df, values='global', names=["Positif","Neutre","Négatif"], title='Pourcentage de Sentiment Global des discours')
+
+    return fig_individu.show(renderer="png"), fig_global.show(renderer="png") 
 
     
 #Chargement des données communes à toutes les analyses
@@ -66,7 +74,6 @@ signature_topic()
 signature_negation()
 #3.Sentiment_Analysis_Signature
 analyse_sentiment()
-
 
      
 

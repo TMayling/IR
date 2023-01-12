@@ -5,20 +5,6 @@ Created on Sun Jan  8 19:12:05 2023
 @author: User
 """
 
-"""Partie à mettre dans le main"""
-import pandas as pd
-
-data = pd.read_csv('speechs.csv', sep=";")
-for phrase in range(len(data)):
-    if data["text"][phrase][0] == "(" or data["text"][phrase][-1] == ")":
-        data = data.drop(phrase)
-#Suppression des lignes avec auteur inconnu       
-data = data[data["author"]!="unk"]
-"""Partie à mettre dans le main"""
-
-
-
-
 
 def construc_dict(data):
     #Création du dictionnaire avec 3 valeurs pour chaque auteur : [nb_neg,sentence,nb_sent]

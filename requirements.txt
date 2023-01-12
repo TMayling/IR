@@ -1,3 +1,5 @@
+kaleido
 pandas
+plotly
 textblob
 textblob_fr

@@ -59,13 +59,13 @@ def construc_dict(data):
 
         
 def taux_negation(individu,dictionnaire):
-    neg_per_sent = dictionnaire[individu][2]
+    neg_per_sent = str(dictionnaire[individu][2])[0:5]
     nb_phrases = dictionnaire[individu][1]
     print("Sachant que les données contiennent "+str(nb_phrases)+" phrases de "+individu+",\n")
     print("Les discours de "+individu+" ont un rapport nombre de négations (\"ne\" ou \"n'\") / nombre de phrase qui vaut "+str(neg_per_sent))
   
 def taux_negation_global(dictionnaire):
-    neg_per_sent = dictionnaire["global"][2]
+    neg_per_sent = str(dictionnaire["global"][2])[0:5]
     nb_phrases = dictionnaire["global"][1]
     print("Le document compte "+str(nb_phrases)+" phrases et a un rapport nombre de négations (\"ne\" ou \"n'\") / nombre de phrase qui vaut "+str(neg_per_sent))
     
